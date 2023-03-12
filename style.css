@@ -51,7 +51,7 @@ header img {
 }
 
 h1 {
-  margin: 1em 0;
+  margin: 1em;
   text-transform:uppercase;
 }
 
@@ -150,7 +150,7 @@ footer {
   }
 
   .course .title, .course .descrition {
-    max-width: 100%;
+    max-width: 90%;
   }
 }
 
@@ -160,5 +160,5 @@ footer {
   }
 
   .skills .column {
-    max-width: 100%;
+    max-width: 90%;
   }
