@@ -11,14 +11,13 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
       - name: Copy files to VPS
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "./*"       # Kopiuj wszystko ze środka repozytorium
+          source: "*"         # Wszystkie pliki
           target: "/var/www/cv_kuczynski"
-          strip_components: 0 # Jeśli Twoje pliki (index.html) są w głównym folderze repo
-          rm: true            # Wyczyść folder przed wgraniem nowej wersji
+          strip_components: 0 # Nie usuwaj folderów, jeśli masz tam np. /css /js
+          rm: true            # CZYŚCI folder przed kopią - to ważne!
