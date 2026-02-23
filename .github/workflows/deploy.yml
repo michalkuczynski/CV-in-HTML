@@ -18,6 +18,7 @@ jobs:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "."
+          source: "./*"       # Kopiuj wszystko ze środka repozytorium
           target: "/var/www/cv_kuczynski"
-          strip_components: 0 # To ważne, żeby zachować strukturę plików
+          strip_components: 0 # Jeśli Twoje pliki (index.html) są w głównym folderze repo
+          rm: true            # Wyczyść folder przed wgraniem nowej wersji
