@@ -3,21 +3,32 @@ name: Deploy to VPS
 on:
   push:
     branches:
-      - main  # Sprawdź czy Twoja główna gałąź to main czy master!
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Copy files to VPS
-        uses: appleboy/scp-action@master
+      - name: Deploy via SSH (Git Pull)
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "*"         # Bez kropki, same pliki
-          target: "/var/www/cv_kuczynski"
-          strip_components: 0
-          rm: false           # Zmień na false!
+          script: |
+            # 1. Wejdź do folderu (jeśli go nie ma, to go stwórz)
+            sudo mkdir -p /var/www/cv_kuczynski
+            sudo chown -R ubuntu:ubuntu /var/www/cv_kuczynski
+            
+            # 2. Jeśli nie ma tam jeszcze gita, sklonuj repo do folderu tymczasowego i przenieś
+            if [ ! -d "/var/www/cv_kuczynski/.git" ]; then
+              git clone https://github.com/${{ github.repository }}.git /tmp/cv_repo
+              cp -r /tmp/cv_repo/. /var/www/cv_kuczynski/
+              rm -rf /tmp/cv_repo
+            else
+              # 3. Jeśli już jest git, po prostu pobierz zmiany
+              cd /var/www/cv_kuczynski && git pull origin main
+            fi
+            
+            # 4. Przeładuj Nginxa w Mailcowie, żeby zobaczył nowe pliki
+            cd ~/docker/mailcow && sudo docker compose exec -T nginx-mailcow nginx -s reload
