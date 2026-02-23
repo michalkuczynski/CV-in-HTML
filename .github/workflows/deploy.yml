@@ -17,8 +17,7 @@ jobs:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "./*"
+          source: "*"         # Bez kropki, same pliki
           target: "/var/www/cv_kuczynski"
           strip_components: 0
-          rm: true
-          debug: true  # <--- To pokaże nam w logach GitHuba dokładnie, gdzie on to pcha
+          rm: false           # Zmień na false!
