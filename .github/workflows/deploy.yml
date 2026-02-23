@@ -17,7 +17,8 @@ jobs:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "*"         # Wszystkie pliki
+          source: "./*"
           target: "/var/www/cv_kuczynski"
-          strip_components: 0 # Nie usuwaj folderów, jeśli masz tam np. /css /js
-          rm: true            # CZYŚCI folder przed kopią - to ważne!
+          strip_components: 0
+          rm: true
+          debug: true  # <--- To pokaże nam w logach GitHuba dokładnie, gdzie on to pcha
